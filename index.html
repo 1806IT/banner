@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>导航</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+
+    </header>
+    <main>
+        <div class="banner" id="mid"></div>
+        
+       
+
+    </main>
+    <footer>
+
+    </footer>
+    <script>
+        var keys ={
+            0: ['q','w','e','r','t','y','u','i','o','p'],
+            1: ['a','s','d','f','g','h','j','k','l'],
+            2: ['z','x','c','v','b','n','m'],
+            'length': 3,//这个还必须有,不知道为什么
+        }
+        var hash={
+            q: 'qq.com',
+            w: 'weibo.com',
+            e: 'ele.com',
+            t: 'tianya.com',
+            r: 'renren.com',
+            y: '52pojie.cn',
+            t: 'tianya.com',
+            u: 'uc.com',
+            i: 'iqiyi.com',
+            o: 'opera.com',
+            p: 'dribbble.com',
+            a: 'acfun.com',
+            s: 'sohu.com',
+            z: 'zhihu.com',
+            m: 'manmanbuy.com',
+        }
+        var hashInLocalStorage = JSON.parse(localStorage.getItem('cache')||'null')
+        if(hashInLocalStorage){
+            hash = hashInLocalStorage
+        }
+        index1 = 0;
+        while(index1 < keys['length']){  //必须带''
+            a = document.createElement('div')
+            mid.appendChild(a)
+            index2 = 0
+            row = keys[index1]
+            while(index2<row['length']){
+                presskey = document.createElement('kbd')
+                presskey.textContent = row[index2]
+                buttonX =document.createElement('button')
+                buttonX.textContent = 'E'
+                buttonX.id=row[index2]
+                //console.log(presskey)
+                buttonX.onclick = function(useredit){
+                    console.log('被点击了',useredit.target.id)
+                    key = useredit.target.id
+                    x = prompt('请输入新地址')
+                    localStorage.setItem('cache', JSON.stringify(hash))
+                    console.log(hash)
+                    hash[key] = x
+                }
+                presskey.appendChild(buttonX)
+                a.appendChild(presskey)
+                index2++
+            }
+            index1++
+        }
+        document.onkeypress = function(user){
+            console.log('用户输入的是：')
+            userpress = user['key']
+            webnet = (hash[userpress])
+            window.open('https://'+webnet, '_blank')
+        }
+
+        
+
+
+    
+
+
+
+    </script>
+</body>
+</html>
