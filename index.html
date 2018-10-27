@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-hans">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,88 +8,129 @@
     <title>导航</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
     <header>
 
     </header>
     <main>
-        <div class="banner" id="mid"></div>
-        
-       
+        <style>
 
+        </style>
+        <div class="wrapper" id="mid"></div>
     </main>
     <footer>
-
     </footer>
     <script>
-        var keys ={
-            0: ['q','w','e','r','t','y','u','i','o','p'],
-            1: ['a','s','d','f','g','h','j','k','l'],
-            2: ['z','x','c','v','b','n','m'],
-            'length': 3,//这个还必须有,不知道为什么
-        }
-        var hash={
-            q: 'qq.com',
-            w: 'weibo.com',
-            e: 'ele.com',
-            t: 'tianya.com',
-            r: 'renren.com',
-            y: '52pojie.cn',
-            t: 'tianya.com',
-            u: 'uc.com',
-            i: 'iqiyi.com',
-            o: 'opera.com',
-            p: 'dribbble.com',
-            a: 'acfun.com',
-            s: 'sohu.com',
-            z: 'zhihu.com',
-            m: 'manmanbuy.com',
-        }
-        var hashInLocalStorage = JSON.parse(localStorage.getItem('cache')||'null')
-        if(hashInLocalStorage){
-            hash = hashInLocalStorage
-        }
-        index1 = 0;
-        while(index1 < keys['length']){  //必须带''
-            a = document.createElement('div')
+        //1. 初始化数据
+        var hashA = init()
+        var keys = hashA['keys']
+        var hash = hashA['hash']
+        
+        //2. 生成键盘
+        for (var index1 = 0; index1 < keys['length']; index1++) {
+            var a = tag('div')//, {className = 'row'})
+            a.className = 'row'
             mid.appendChild(a)
-            index2 = 0
-            row = keys[index1]
-            while(index2<row['length']){
-                presskey = document.createElement('kbd')
-                presskey.textContent = row[index2]
-                buttonX =document.createElement('button')
-                buttonX.textContent = 'E'
-                buttonX.id=row[index2]
-                //console.log(presskey)
-                buttonX.onclick = function(useredit){
-                    console.log('被点击了',useredit.target.id)
-                    key = useredit.target.id
-                    x = prompt('请输入新地址')
-                    localStorage.setItem('cache', JSON.stringify(hash))
-                    console.log(hash)
-                    hash[key] = x
-                }
+            var row = keys[index1];
+            for (var index2 = 0; index2 < row['length']; index2++) {
+                var span = createSpan(row[index2])   //tag('span')                
+                var buttonX = createButton('row[index2]')//tag('button')             
+                var img = createImage(hash[row[index2]])//tag('img')
+                var presskey = tag('kbd')
+                presskey.className = 'key'
+                presskey.appendChild(span)
+                presskey.appendChild(img)
                 presskey.appendChild(buttonX)
                 a.appendChild(presskey)
-                index2++
             }
-            index1++
         }
-        document.onkeypress = function(user){
+
+        function x(){}
+        //3. 监听键盘
+        document.onkeypress = function (user) {
             console.log('用户输入的是：')
-            userpress = user['key']
-            webnet = (hash[userpress])
-            window.open('https://'+webnet, '_blank')
+            var userpress = user['key']
+            var webnet = (hash[userpress])
+            window.open('http://www.' + webnet, '_blank')
+        }
+        function getFormLocalStorage(name) {
+            return JSON.parse(localStorage.getItem(name) || 'null')  //函数可以放任意位置，用函数可以减轻写代码的压力，将原来的代码用函数包裹起来，下次使用就简单多了
+        }
+        function tag(tagName) {
+            return document.createElement(tagName)
         }
 
-        
+
+        //以下是函数
+        function init() {
+            var keys = {
+                0: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+                1: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+                2: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+                'length': 3
+            }
+            var hash = {
+                q: 'qq.com', w: 'weibo.com', e: 'ele.com', t: 'taobao.com', r: 'renren.com', y: '52pojie.cn', t: 'tianya.com', u: 'uc.com',
+                i: 'iqiyi.com', o: 'opera.com', p: 'dribbble.com', a: 'acfun.com', s: 'sohu.com', z: 'zhihu.com', m: 'manmanbuy.com',
+            }
+            var hashInLocalStorage = getFormLocalStorage('cache')
+            if (hashInLocalStorage) {
+                hash = hashInLocalStorage
+            }
+            return {
+                "keys": keys,
+                "hash": hash
+            }
+        }
+
+        function createSpan(textContent) {
+            var span = tag('span')
+            span.textContent = textContent
+            span.className = "text"
+            return span
+        }
 
 
-    
+        function createButton(id) {
+            var buttonX = tag('button')
+            buttonX.textContent = 'E'
+            buttonX.id = id
+            buttonX.onclick = function (useredit) {
+                console.log('被点击了', useredit.target.id)
+                var button2 = useredit['target']
+                var img2 = button2.previousSlibling;//拿到前面一个兄弟元素？
+                var key = button2['id']
+                var x = prompt('请输入新地址')
+                hash[key] = x
+                img2.src = 'http://www.' + x + '/favicon.ico'
+                img2.onerror = function (xxx) {
+                    console.log('下载失败')
+                    xxx.target.src = './11.jpeg'
+                }
+                localStorage.setItem('cache', JSON.stringify(hash))
+                console.log(hash)
+            }
+            return buttonX
+        }
 
+        function createImage(domain) {
+            var img = tag('img')
+            if (domain) {
+                img.src = 'http://www.' + domain + '/favicon.ico'//去对应网站取图标
+                //console.log(presskey)
+            } else {
+                img.src = './11.jpeg'
+            }
+            img.onerror = function (xxx) {
+                console.log('下载失败')
+                xxx.target.src = './11.jpeg'
+            }
+            return img
+        }
 
 
     </script>
 </body>
+
 </html>
