@@ -1,0 +1,41 @@
+*{margin: 0;padding: 0;}
+ul,li,ol{list-style: none;}
+.clearfix::after{
+    content:'';
+    display: block;
+    clear: both;
+}
+body{
+    display: flex;
+    justify-content: center;
+}
+main>div#window{
+    width: 400px;
+    overflow: hidden;
+    border: 1px solid red;
+
+}
+main>div#window>ul#images{
+    display: flex;
+    align-items: flex-start;
+    transition:transform 0.6s;
+}
+div#window>ul>li>img{
+    width: 400px;
+    
+}
+ol{
+     display: flex;
+     justify-content:space-around;
+     flex-wrap: wrap;
+     border:1px solid red;
+}
+ol>li{
+    float: left;
+    margin-left: 1px;
+    opacity: 0.4;
+}
+
+main>ol img{
+    width:60px;
+}
